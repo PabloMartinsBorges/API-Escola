@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Escola.Application.DTOs.Usuario
 {
-    internal class UsuarioPutDTO
+    public class UsuarioPutDTO
     {
+        [Required(ErrorMessage = "O nome do usuário é obrigatório")]
+        [MaxLength(100, ErrorMessage = "O nome do usuário deve ter no máximo 100 caracteres")]
+        public string Nome { get; set; }
+        [Required(ErrorMessage = "O email do usuário é obrigatório")]
+        [MaxLength(100, ErrorMessage = "O email do usuário deve ter no máximo 100 caracteres")]
+
+        public string Email { get; set; }
     }
 }

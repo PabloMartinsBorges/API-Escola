@@ -152,9 +152,10 @@ namespace Escola.Infra.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Email")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("integer");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("Excluido")
                         .HasColumnType("boolean");
