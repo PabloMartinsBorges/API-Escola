@@ -33,5 +33,12 @@ namespace Escola.Infra.Data.Repositories
         {
             return await _context.Notas.FirstOrDefaultAsync(n => n.Id == id && n.Excluido == false);
         }
+
+        public async Task<Nota> UpdateAsync(Nota nota)
+        {
+            _context.Notas.Update(nota);
+            await _context.SaveChangesAsync();
+            return nota;
+        }
     }
 }

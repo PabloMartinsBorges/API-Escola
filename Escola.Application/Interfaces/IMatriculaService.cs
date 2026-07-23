@@ -8,10 +8,10 @@ namespace Escola.Application.Interfaces
 {
     public interface IMatriculaService
     {
-        public Task<MatriculaGetDTO> GetMatriculaByIdAsync(int id);
-        public Task<List<MatriculaGetDTO>> GetAllMatriculasAsync();
-        public Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO matriculaDTO);
-        public Task<MatriculaGetDTO> UpdateAsync(MatriculaPutDTO matriculaDTO);
+        public Task<MatriculaDetailGetDTO> GetMatriculaByIdAsync(int id);
+        public Task<List<MatriculaDetailGetDTO>> GetAllMatriculasAsync();
+        public Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO matriculaPostDTO);
+        public Task<MatriculaGetDTO> UpdateAsync(MatriculaPutDTO matriculaPutDTO);
         public Task<MatriculaGetDTO> DeleteAsync(int id);
     }
 }

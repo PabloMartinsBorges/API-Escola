@@ -11,5 +11,7 @@ namespace Escola.Domain.Interfaces
         Task<List<Nota>> GetAllNotasAsync();
         Task<Nota> AddAsync(Nota nota);
 
+        Task<Nota> UpdateAsync(Nota nota);
+
     }
 }

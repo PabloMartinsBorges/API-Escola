@@ -10,8 +10,8 @@ namespace Escola.Application.Interfaces
     {
         Task<UsuarioGetDTO> GetUsuarioByIdAsync(int id);
         Task<List<UsuarioGetDTO>> GetAllUsuariosAsync();
-        Task<UsuarioGetDTO> AddAsync(UsuarioPostDTO usuarioDTO);
-        Task<UsuarioGetDTO> UpdateAsync(UsuarioPutDTO usuarioDTO);
+        Task<UsuarioGetDTO> AddAsync(UsuarioPostDTO usuarioPostDTO);
+        Task<UsuarioGetDTO> UpdateAsync(int usuarioId, UsuarioPutDTO usuarioPutDTO);
         Task<UsuarioGetDTO> DeleteAsync(int id);
     }
 }
