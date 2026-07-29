@@ -95,22 +95,25 @@ namespace Escola.Application.Services
             return turmasDTO;
         }
 
-       
 
+
+      
         public async Task<TurmaGetDTO> UpdateAsync(TurmaPutDTO turmaDTO)
         {
-            if(await _turmaRepository.GetTurmaByIdAsync(turmaDTO.Id) == null)
+            // 1. Busca a entidade existente (o EF passa a rastreá-la)
+            var turma = await _turmaRepository.GetTurmaByIdAsync(turmaDTO.Id);
+
+            if (turma == null)
             {
                 return null;
             }
-            var turma = new Turma
-            {
-                Id = turmaDTO.Id,
-                Nome = turmaDTO.Nome,
-                Descricao = turmaDTO.Descricao,
-                CursoId = turmaDTO.CursoId
-            };
 
+            // 2. Atualiza as propriedades na própria entidade rastreada
+            turma.Nome = turmaDTO.Nome;
+            turma.Descricao = turmaDTO.Descricao;
+            turma.CursoId = turmaDTO.CursoId;
+
+            // 3. Salva a entidade existente
             var updatedTurma = await _turmaRepository.UpdateAsync(turma);
 
             return new TurmaGetDTO
@@ -120,10 +123,8 @@ namespace Escola.Application.Services
                 Descricao = updatedTurma.Descricao,
                 CursoId = updatedTurma.CursoId
             };
-
-            
         }
 
-        
+
     }
 }

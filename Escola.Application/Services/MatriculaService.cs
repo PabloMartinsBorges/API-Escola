@@ -85,7 +85,7 @@ namespace Escola.Application.Services
             return matriculasDTO;
         }
 
-        public async Task<MatriculaDetailGetDTO> IMatriculaService.GetMatriculaByIdAsync(int id)
+        public async Task<MatriculaDetailGetDTO> GetMatriculaByIdAsync(int id)
         {
             var matricula = await _matriculaRepository.GetMatriculaByIdAsync(id);
 
