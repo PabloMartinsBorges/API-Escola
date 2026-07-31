@@ -12,6 +12,6 @@ namespace Escola.Application.Interfaces
         Task<List<NotaGetDTO>> GetAllNotasAsync();
         Task<NotaGetDTO> AddAsync(NotaPostDTO notaDTO);
 
-        Task<NotaGetDTO> UpdateAsync(NotaPostDTO notaDTO);
+        Task<NotaGetDTO> UpdateAsync(NotaPutDTO notaDTO);
     }
 }

@@ -68,14 +68,18 @@ namespace Escola.Application.Services
             };
         }
 
-        public async Task<NotaGetDTO> UpdateAsync(NotaPostDTO notaDTO)
+        public async Task<NotaGetDTO> UpdateAsync(NotaPutDTO notaDTO)
         {
-            var nota = await _notaRepository.GetNotaByIdAsync(notaDTO.MatriculaId);
+            var nota = await _notaRepository.GetNotaByIdAsync(notaDTO.Id);
 
             if (nota == null) return null;
 
             if(notaDTO.ValorNota >= 60) nota.Aprovado = true;
             else nota.Aprovado = false;
+
+            nota.ValorNota = notaDTO.ValorNota;
+            nota.MatriculaId = notaDTO.MatriculaId;
+            nota.DataNota = DateTime.Now;
 
             return new NotaGetDTO
             {

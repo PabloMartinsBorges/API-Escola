@@ -117,18 +117,18 @@ namespace Escola.Application.Services
 
         public async Task<MatriculaGetDTO> UpdateAsync(MatriculaPutDTO matriculaDTO)
         {
-            if(await _matriculaRepository.GetMatriculaByIdAsync(matriculaDTO.Id) == null)
+
+            var matricula = await _matriculaRepository.GetMatriculaByIdAsync(matriculaDTO.Id);
+            if (matricula == null)
             {
                 return null;
             }
 
 
-            var matricula = new Matricula
-            {
-                Id = matriculaDTO.Id,
-                TurmaId = matriculaDTO.TurmaId,
-                DataExpiracao = matriculaDTO.DataExpiracao
-            };
+
+            matricula.Id = matriculaDTO.Id;
+            matricula.TurmaId = matriculaDTO.TurmaId;
+            matricula.DataExpiracao = matriculaDTO.DataExpiracao;
 
             var updatedMatricula = await _matriculaRepository.UpdateAsync(matricula);
 

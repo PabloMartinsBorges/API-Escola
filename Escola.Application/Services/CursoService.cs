@@ -79,16 +79,17 @@ namespace Escola.Application.Services
 
         public async Task<CursoGetDTO> UpdateAsync(CursoPutDTO cursoPutDTO)
         {
-            if(await cursoRepostitory.GetCursoByIdAsync(cursoPutDTO.Id) == null)
+
+            var curso = await cursoRepostitory.GetCursoByIdAsync(cursoPutDTO.Id);
+
+            if ( curso == null)
             {
                 return null;
             }
-            var curso = new Curso
-            {
-                Id = cursoPutDTO.Id,
-                Nome = cursoPutDTO.Nome,
-                Descricao = cursoPutDTO.Descricao
-            };
+
+            curso.Id = cursoPutDTO.Id;
+            curso.Nome = cursoPutDTO.Nome;
+            curso.Descricao = cursoPutDTO.Descricao;
 
             var updatedCurso = await cursoRepostitory.UpdateAsync(curso);
 

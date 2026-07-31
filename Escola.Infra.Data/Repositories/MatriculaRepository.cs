@@ -45,12 +45,12 @@ namespace Escola.Infra.Data.Repositories
 
         public async Task<List<Matricula>> GetAllMatriculasAsync()
         {
-            return await _context.Matricula.Where(m => m.Excluido == false).ToListAsync();
+            return await _context.Matricula.Include(m=>m.Usuario).Include(m => m.Turma).Where(m => m.Excluido == false).ToListAsync();
         }
 
         public async Task<Matricula> GetMatriculaByIdAsync(int id)
         {
-            return await _context.Matricula.FindAsync(id);
+            return await _context.Matricula.Include(m => m.Usuario).Include(m => m.Turma).Where(m => !m.Excluido && m.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<Matricula> UpdateAsync(Matricula matricula)
