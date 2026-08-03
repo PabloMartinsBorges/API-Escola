@@ -1,5 +1,6 @@
 ﻿using Escola.Application.DTOs.Curso;
 using Escola.Application.DTOs.Turma;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -20,13 +21,13 @@ namespace Escola.Application.Services
             _cursoRepository = cursoRepository;
         }
 
-        public async Task<TurmaGetDTO> AddAsync(TurmaPostDTO turmaDTO, CursoGetDTO cursoDTO)
+        public async Task<TurmaGetDTO> AddAsync(TurmaPostDTO turmaDTO)
         {
-            var curso = await _cursoRepository.GetCursoByIdAsync(cursoDTO.Id);
+            var curso = await _cursoRepository.GetCursoByIdAsync(turmaDTO.CursoId);
 
             if(curso == null)
             {
-                throw new Exception($"Curso não encontrado.");
+                throw new NotFoundException($"Curso não encontrado.");
             }
 
             var turma = new Turma
@@ -51,9 +52,9 @@ namespace Escola.Application.Services
         {
             var deletedTurma = await _turmaRepository.DeleteAsync(id);
 
-            if (deletedTurma == null) return null;
+            if (deletedTurma == null) throw new NotFoundException($"Turma não encontrada.");
 
-            
+
             return new TurmaGetDTO
             {
                 Id = deletedTurma.Id,
@@ -68,7 +69,7 @@ namespace Escola.Application.Services
         {
             var turma = await _turmaRepository.GetTurmaByIdAsync(id);
 
-            if (turma == null) return null;
+            if (turma == null) throw new NotFoundException($"Turma não encontrada.");
 
             return new TurmaDetailGetDTO
             {
@@ -109,12 +110,21 @@ namespace Escola.Application.Services
       
         public async Task<TurmaGetDTO> UpdateAsync(TurmaPutDTO turmaDTO)
         {
+
+
+            var curso = await _cursoRepository.GetCursoByIdAsync(turmaDTO.CursoId);
+
+            if (curso == null)
+            {
+                throw new NotFoundException($"Curso não encontrado.");
+            }
+
             // 1. Busca a entidade existente (o EF passa a rastreá-la)
             var turma = await _turmaRepository.GetTurmaByIdAsync(turmaDTO.Id);
 
             if (turma == null)
             {
-                return null;
+                throw new NotFoundException($"Turma não encontrada.");
             }
 
             // 2. Atualiza as propriedades na própria entidade rastreada

@@ -1,6 +1,7 @@
 ﻿using Escola.Application.DTOs.Matricula;
 using Escola.Application.DTOs.Turma;
 using Escola.Application.DTOs.Usuario;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -13,22 +14,26 @@ namespace Escola.Application.Services
     public class MatriculaService : IMatriculaService
     {
         public readonly IMatriculaRepository _matriculaRepository;
-        private readonly ITurmaRepository _turmaRepository;
+        public readonly ITurmaRepository _turmaRepository;
+        public readonly IUsuarioRepository _usuarioRepository;
 
-        public MatriculaService(IMatriculaRepository matriculaRepository, ITurmaRepository turmaRepository)
+        public MatriculaService(IMatriculaRepository matriculaRepository, ITurmaRepository turmaRepository, IUsuarioRepository usuarioRepository)
         {
             _matriculaRepository = matriculaRepository;
             _turmaRepository = turmaRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         public async Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO matriculaPostDTO)
         {
-            // Verifica se a Turma existe antes de criar a matrícula
-            var turma = await _turmaRepository.GetTurmaByIdAsync(matriculaPostDTO.TurmaId);
-            if (turma == null)
+            if(await _usuarioRepository.GetUsuarioByIdAsync(matriculaPostDTO.UsuarioId) == null)
             {
-                // Retorna null para que o controller trate e retorne BadRequest/NotFound
-                return null;
+                throw new NotFoundException($"Usuário não existe.");
+            }
+
+            if(await _turmaRepository.GetTurmaByIdAsync(matriculaPostDTO.TurmaId) == null)
+            {
+                throw new NotFoundException($"Turma não existe.");
             }
 
             var matricula = new Matricula
@@ -39,7 +44,6 @@ namespace Escola.Application.Services
                 DataExpiracao = matriculaPostDTO.DataExpiracao,
                 Ativa = true
             };
-
             var createdMatricula = await _matriculaRepository.AddAsync(matricula);
             return new MatriculaGetDTO
             {
@@ -55,7 +59,7 @@ namespace Escola.Application.Services
         public async Task<MatriculaGetDTO> DeleteAsync(int id)
         {
             var deletedMatricula = await _matriculaRepository.DeleteAsync(id);
-            if (deletedMatricula == null) return null;
+            if (deletedMatricula == null) throw new NotFoundException($"Matrícula não encontrada.");
 
             return new MatriculaGetDTO
             {
@@ -100,7 +104,7 @@ namespace Escola.Application.Services
         {
             var matricula = await _matriculaRepository.GetMatriculaByIdAsync(id);
 
-            if (matricula == null) return null;
+            if (matricula == null) throw new NotFoundException($"Matrícula não encontrada.");
 
             return new MatriculaDetailGetDTO
             {
@@ -132,7 +136,7 @@ namespace Escola.Application.Services
             var matricula = await _matriculaRepository.GetMatriculaByIdAsync(matriculaDTO.Id);
             if (matricula == null)
             {
-                return null;
+                throw new NotFoundException($"Matrícula não encontrada.");
             }
 
 

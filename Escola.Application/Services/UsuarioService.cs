@@ -1,4 +1,5 @@
 ﻿using Escola.Application.DTOs.Usuario;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -51,8 +52,7 @@ namespace Escola.Application.Services
         {
             var deletedUsuario = await _usuarioRepository.DeleteAsync(id);
 
-            if (deletedUsuario == null) return null;
-
+            if (deletedUsuario == null) throw new NotFoundException($"Usuário não encontrado.");
             return new UsuarioGetDTO
             {
                 Id = deletedUsuario.Id,
@@ -79,7 +79,7 @@ namespace Escola.Application.Services
         {
             var usuario = await _usuarioRepository.GetUsuarioByIdAsync(id);
 
-            if (usuario == null) return null;
+            if (usuario == null) throw new NotFoundException($"Usuário não encontrado.");
 
             return new UsuarioGetDTO
             {
@@ -93,7 +93,7 @@ namespace Escola.Application.Services
         {
             var usuario = await _usuarioRepository.GetUsuarioByIdAsync(usuarioId);
 
-            if (usuario == null) return null;
+            if (usuario == null) throw new NotFoundException($"Usuário não encontrado.");
 
             usuario.Nome = usuarioPutDTO.Nome;
             usuario.Email = usuarioPutDTO.Email;

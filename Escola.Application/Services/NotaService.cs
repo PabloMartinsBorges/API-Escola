@@ -1,4 +1,5 @@
 ﻿using Escola.Application.DTOs.Notas;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -11,14 +12,21 @@ namespace Escola.Application.Services
     public class NotaService: INotaService
     {
         public readonly INotaRepository _notaRepository;
+        public readonly IMatriculaRepository _matriculaRepository;
 
-        public NotaService(INotaRepository notaRepository)
+        public NotaService(INotaRepository notaRepository, IMatriculaRepository matriculaRepository)
         {
             _notaRepository = notaRepository;
+            _matriculaRepository = matriculaRepository;
         }
 
         public async Task<NotaGetDTO> AddAsync(NotaPostDTO notaDTO)
         {
+            if(await _matriculaRepository.GetMatriculaByIdAsync(notaDTO.MatriculaId) == null)
+            {
+                throw new NotFoundException($"Matrícula não encontrada.");
+            }
+
             var nota = new Nota
             {
                 MatriculaId = notaDTO.MatriculaId,
@@ -56,8 +64,8 @@ namespace Escola.Application.Services
         {
             var nota = await _notaRepository.GetNotaByIdAsync(id);
 
-            if (nota == null) return null;
-            
+            if (nota == null) throw new NotFoundException($"Nota não encontrada.");
+
             return new NotaGetDTO
             {
                 Id = nota.Id,
@@ -72,9 +80,9 @@ namespace Escola.Application.Services
         {
             var nota = await _notaRepository.GetNotaByIdAsync(notaDTO.Id);
 
-            if (nota == null) return null;
+            if (nota == null) throw new NotFoundException($"Nota não encontrada.");    
 
-            if(notaDTO.ValorNota >= 60) nota.Aprovado = true;
+            if (notaDTO.ValorNota >= 60) nota.Aprovado = true;
             else nota.Aprovado = false;
 
             nota.ValorNota = notaDTO.ValorNota;

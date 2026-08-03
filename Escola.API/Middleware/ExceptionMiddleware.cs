@@ -24,11 +24,20 @@ namespace Escola.API.Middleware
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
+
+                int statusCode = ex switch
+                {
+                    BadRequestException => StatusCodes.Status400BadRequest,
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                    _ => StatusCodes.Status500InternalServerError
+                };
+
                 httpContext.Response.ContentType = "application/json";
-                httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                httpContext.Response.StatusCode = statusCode;
                 var response = _env.IsDevelopment()
-                    ? new ApiException(httpContext.Response.StatusCode.ToString(), ex.Message, ex.StackTrace?.ToString())
-                    : new ApiException(httpContext.Response.StatusCode.ToString(), ex.Message, null);
+                    ? new ApiException(statusCode.ToString(), ex.Message, ex.StackTrace?.ToString())
+                    : new ApiException(statusCode.ToString(), ex.Message, null);
 
                 //options to serialize the response object to JSON with camelCase property naming
                 var options = new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase };
