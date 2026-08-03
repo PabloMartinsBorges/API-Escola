@@ -32,7 +32,7 @@ namespace Escola.API.Controllers
             return Ok(usuarios);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult> GetUsuarioById(int id)
         {
             var usuario = await usuarioService.GetUsuarioByIdAsync(id);
@@ -48,7 +48,7 @@ namespace Escola.API.Controllers
             return Ok(new { message = "Usuário atualizado com sucesso." });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUsuario(int id)
         {
             var deletedUsuario = await usuarioService.DeleteAsync(id);

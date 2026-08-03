@@ -25,7 +25,7 @@ namespace Escola.Infra.Ioc
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             }
             );
-            services.AddScoped<ICursoRepostitory, CursoRepository>();
+            services.AddScoped<ICursoRepository, CursoRepository>();
             services.AddScoped<ITurmaRepository, TurmaRepository>();
             services.AddScoped<IMatriculaRepository, MatriculaRepository>();
             services.AddScoped<INotaRepository, NotaRepository>();

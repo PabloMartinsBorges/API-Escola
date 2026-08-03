@@ -13,22 +13,33 @@ namespace Escola.Application.Services
     public class MatriculaService : IMatriculaService
     {
         public readonly IMatriculaRepository _matriculaRepository;
+        private readonly ITurmaRepository _turmaRepository;
 
-        public MatriculaService(IMatriculaRepository matriculaRepository)
+        public MatriculaService(IMatriculaRepository matriculaRepository, ITurmaRepository turmaRepository)
         {
             _matriculaRepository = matriculaRepository;
+            _turmaRepository = turmaRepository;
         }
 
         public async Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO matriculaPostDTO)
         {
+            // Verifica se a Turma existe antes de criar a matrícula
+            var turma = await _turmaRepository.GetTurmaByIdAsync(matriculaPostDTO.TurmaId);
+            if (turma == null)
+            {
+                // Retorna null para que o controller trate e retorne BadRequest/NotFound
+                return null;
+            }
+
             var matricula = new Matricula
             {
                 UsuarioId = matriculaPostDTO.UsuarioId,
                 TurmaId = matriculaPostDTO.TurmaId,
-                DataMatricula = DateTime.Now,
+                DataMatricula = DateTime.UtcNow,
                 DataExpiracao = matriculaPostDTO.DataExpiracao,
                 Ativa = true
             };
+
             var createdMatricula = await _matriculaRepository.AddAsync(matricula);
             return new MatriculaGetDTO
             {

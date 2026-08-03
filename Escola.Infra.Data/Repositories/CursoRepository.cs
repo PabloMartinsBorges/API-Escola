@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Escola.Infra.Data.Repositories
 {
-    public class CursoRepository : ICursoRepostitory
+    public class CursoRepository : ICursoRepository
     {
         // Implement the methods of ICursoRepository using Entity Framework Core and the ApplicationDbContext
         // Use async methods and proper error handling

@@ -24,7 +24,7 @@ namespace Escola.Application.Services
                 MatriculaId = notaDTO.MatriculaId,
                 ValorNota = notaDTO.ValorNota,
                 Aprovado = notaDTO.ValorNota >= 60,
-                DataNota = DateTime.Now
+                DataNota = DateTime.UtcNow
             };
 
             var createdNota = await _notaRepository.AddAsync(nota);
@@ -79,7 +79,7 @@ namespace Escola.Application.Services
 
             nota.ValorNota = notaDTO.ValorNota;
             nota.MatriculaId = notaDTO.MatriculaId;
-            nota.DataNota = DateTime.Now;
+            nota.DataNota = DateTime.UtcNow;
 
             return new NotaGetDTO
             {

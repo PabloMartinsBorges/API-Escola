@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Escola.Domain.Interfaces
 {
-    public interface ICursoRepostitory
+    public interface ICursoRepository
     {
         //Task - representa uma operação assíncrona que pode retornar um valor no futuro.
         //Curso - representa o tipo de objeto que será retornado pela operação assíncrona.

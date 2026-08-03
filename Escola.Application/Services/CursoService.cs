@@ -11,9 +11,9 @@ namespace Escola.Application.Services
     public class CursoService : ICursoService
     {
 
-        public readonly ICursoRepostitory cursoRepostitory;
+        public readonly ICursoRepository cursoRepostitory;
 
-        public CursoService(ICursoRepostitory cursoRepostitory)
+        public CursoService(ICursoRepository cursoRepostitory)
         {
             this.cursoRepostitory = cursoRepostitory;
         }
