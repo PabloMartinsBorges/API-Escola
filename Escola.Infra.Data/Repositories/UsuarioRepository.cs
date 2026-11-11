@@ -38,6 +38,11 @@ namespace Escola.Infra.Data.Repositories
 
         }
 
+        public async Task<bool> ExisteUsuarioAsync()
+        {
+            return await _context.Usuario.AnyAsync(u => !u.Excluido);
+        }
+
         public async Task<List<Usuario>> GetAllUsuariosAsync()
         {
             return await _context.Usuario.Where(u => !u.Excluido).ToListAsync();
